@@ -1,0 +1,1035 @@
+/* ================================================================
+   JADWAL SHOLAT PWA — style.css
+   Author: Prayer Times PWA
+   Description: Accessible, responsive stylesheet optimized for
+   all ages. WCAG AA compliant. Supports light & dark mode.
+================================================================ */
+
+/* ── 1. CSS CUSTOM PROPERTIES (Design Tokens) ──────────────────
+   All colors, spacings, and type scales are defined here.
+   This makes theming (dark/light) trivial and consistent.
+──────────────────────────────────────────────────────────────── */
+:root {
+  /* --- Color Palette: Light Mode --- */
+  --color-bg:            #f0faf4;      /* Soft green-tinted white */
+  --color-bg-card:       #ffffff;
+  --color-bg-header:     #1a6b3c;      /* Deep Islamic green */
+  --color-bg-next:       #1a6b3c;
+  --color-bg-footer:     #e8f5ee;
+  --color-bg-skeleton:   #dce8e0;
+
+  --color-text-primary:  #0d2b1a;      /* Near-black for body text */
+  --color-text-secondary:#2e5c3e;      /* Muted green */
+  --color-text-muted:    #5a7d6a;
+  --color-text-on-dark:  #ffffff;
+  --color-text-on-dark-muted: rgba(255,255,255,0.8);
+
+  --color-accent:        #1a6b3c;
+  --color-accent-light:  #2e8b57;
+  --color-accent-hover:  #145a30;
+  --color-active-prayer: #fff8e1;      /* Warm yellow tint for active prayer */
+  --color-active-border: #f4a62a;      /* Golden amber */
+  --color-active-text:   #7a4a00;
+
+  --color-error-bg:      #fff0f0;
+  --color-error-text:    #c0392b;
+  --color-error-border:  #e74c3c;
+
+  --color-border:        #c8e0d0;
+  --color-shadow:        rgba(26, 107, 60, 0.12);
+  --color-shadow-strong: rgba(26, 107, 60, 0.25);
+
+  /* --- Hijri date color --- */
+  --color-hijri:         rgba(255,255,255,0.75);
+
+  /* --- Typography --- */
+  --font-family:         'Segoe UI', 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-size-base:      1rem;         /* 16px */
+  --font-size-sm:        0.9rem;
+  --font-size-xs:        0.8rem;
+  --font-size-lg:        1.2rem;
+  --font-size-xl:        1.5rem;
+  --font-size-2xl:       2rem;
+  --font-size-3xl:       2.75rem;
+  --font-size-clock:     3.5rem;
+  --font-size-next-name: 2.25rem;
+  --font-size-next-time: 3rem;
+
+  --line-height-base:    1.6;
+  --line-height-tight:   1.25;
+  --font-weight-normal:  400;
+  --font-weight-medium:  500;
+  --font-weight-bold:    700;
+  --font-weight-black:   900;
+
+  /* --- Spacing Scale (8-point grid) --- */
+  --space-1:   0.25rem;   /* 4px  */
+  --space-2:   0.5rem;    /* 8px  */
+  --space-3:   0.75rem;   /* 12px */
+  --space-4:   1rem;      /* 16px */
+  --space-5:   1.25rem;   /* 20px */
+  --space-6:   1.5rem;    /* 24px */
+  --space-8:   2rem;      /* 32px */
+  --space-10:  2.5rem;    /* 40px */
+  --space-12:  3rem;      /* 48px */
+  --space-16:  4rem;      /* 64px */
+
+  /* --- Border Radius --- */
+  --radius-sm:   0.5rem;
+  --radius-md:   1rem;
+  --radius-lg:   1.5rem;
+  --radius-xl:   2rem;
+  --radius-full: 9999px;
+
+  /* --- Transitions --- */
+  --transition-fast:    150ms ease;
+  --transition-base:    250ms ease;
+  --transition-slow:    400ms ease;
+
+  /* --- Shadows --- */
+  --shadow-sm:   0 1px 4px var(--color-shadow);
+  --shadow-md:   0 4px 16px var(--color-shadow);
+  --shadow-lg:   0 8px 32px var(--color-shadow-strong);
+
+  /* --- Layout --- */
+  --content-max-width: 680px;
+  --header-height: 4rem;
+
+  /* --- Touch target minimum (WCAG 2.5.5) --- */
+  --touch-target: 3rem;    /* 48px minimum */
+}
+
+/* ── Dark Mode Overrides ──────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg:            #0d1f14;
+  --color-bg-card:       #162a1d;
+  --color-bg-header:     #0f3d20;
+  --color-bg-next:       #0f3d20;
+  --color-bg-footer:     #0d1f14;
+  --color-bg-skeleton:   #1e3828;
+
+  --color-text-primary:  #e8f5ee;
+  --color-text-secondary:#90c8a0;
+  --color-text-muted:    #6fa880;
+  --color-text-on-dark:  #e8f5ee;
+  --color-text-on-dark-muted: rgba(232,245,238,0.7);
+
+  --color-accent:        #4ade80;
+  --color-accent-light:  #2e8b57;
+  --color-accent-hover:  #22c55e;
+
+  --color-active-prayer: #2a2000;
+  --color-active-border: #c8861c;
+  --color-active-text:   #ffd380;
+
+  --color-error-bg:      #2a0a0a;
+  --color-error-text:    #ff7f7f;
+  --color-error-border:  #c0392b;
+
+  --color-border:        #2a4a35;
+  --color-shadow:        rgba(0, 0, 0, 0.4);
+  --color-shadow-strong: rgba(0, 0, 0, 0.6);
+  --color-hijri:         rgba(144,200,160,0.85);
+}
+
+/* ── 2. RESET & BASE ────────────────────────────────────────────
+   Minimal, purposeful reset. Not a nuclear reset.
+──────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Smooth scrolling for skip links */
+  scroll-behavior: smooth;
+  /* Prevent font size inflation on iOS */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Base font size — all rem units scale from here */
+  font-size: 16px;
+}
+
+/* Scale up base font size on large screens for readability */
+@media (min-width: 768px) {
+  html { font-size: 17px; }
+}
+@media (min-width: 1200px) {
+  html { font-size: 18px; }
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  min-height: 100dvh;
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
+}
+
+/* ── Focus Visible (WCAG 2.4.7) ─────────────────────────────── */
+/* Remove default outline only when not keyboard navigating */
+:focus { outline: none; }
+
+:focus-visible {
+  outline: 3px solid var(--color-accent-light);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Reduced Motion (WCAG 2.3.3) ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ── Typography Defaults ─────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+p { margin-bottom: 0; }
+
+a {
+  color: var(--color-accent-light);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+a:hover { color: var(--color-accent-hover); }
+
+ul { list-style: none; }
+
+img, svg { display: block; max-width: 100%; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+time { font-variant-numeric: tabular-nums; }
+
+/* ── 3. SKIP LINK (Accessibility) ───────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 10000;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-accent);
+  color: var(--color-text-on-dark);
+  font-weight: var(--font-weight-bold);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+.skip-link:focus-visible {
+  top: 0;
+  outline-offset: 0;
+}
+
+/* ── 4. UTILITY CLASSES ─────────────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 5. BUTTONS ─────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  min-height: var(--touch-target);
+  background-color: var(--color-accent);
+  color: var(--color-text-on-dark);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-md);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:focus-visible {
+  outline-color: var(--color-active-border);
+}
+.btn-primary.btn-small {
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--font-size-base);
+  min-height: calc(var(--touch-target) * 0.85);
+}
+
+/* Ghost / secondary button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  min-height: var(--touch-target);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+.btn-ghost:hover {
+  background: var(--color-bg-footer);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.btn-ghost.btn-small {
+  padding: var(--space-2) var(--space-4);
+  min-height: calc(var(--touch-target) * 0.85);
+}
+
+/* Icon-only button */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xl);
+  color: var(--color-text-on-dark);
+  border: 2px solid rgba(255,255,255,0.2);
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+.btn-icon:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.1);
+}
+
+/* Refresh location button */
+.btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  background: transparent;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xl);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+.btn-refresh:hover {
+  background: var(--color-bg-footer);
+  transform: rotate(30deg);
+}
+
+/* Notification button states */
+.btn-notification[aria-pressed="true"] {
+  background-color: var(--color-active-border);
+}
+.btn-notification[aria-pressed="true"]:hover {
+  background-color: #c8861c;
+}
+
+/* ── 6. LAYOUT — App Shell ───────────────────────────────────── */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg-header);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  transition: background-color var(--transition-slow);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-6);
+  height: var(--header-height);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.brand-icon {
+  font-size: var(--font-size-xl);
+  line-height: 1;
+}
+
+.brand-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-on-dark);
+  letter-spacing: -0.01em;
+}
+
+/* ── Main Content Wrapper ─────────────────────────────────────── */
+main {
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding: 0 var(--space-4) var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ── 7. CLOCK SECTION ───────────────────────────────────────── */
+.section-clock {
+  background: linear-gradient(135deg, var(--color-bg-header), var(--color-accent-light));
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  /* Extend to full width by negating parent padding */
+  margin-inline: calc(-1 * var(--space-4));
+  margin-top: 0;
+  padding: var(--space-8) var(--space-8) var(--space-10);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.clock-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.clock-time {
+  font-size: var(--font-size-clock);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-on-dark);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  line-height: 1;
+}
+
+.clock-date {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-on-dark-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.clock-hijri {
+  font-size: var(--font-size-base);
+  color: var(--color-hijri);
+  font-style: italic;
+}
+
+/* ── 8. LOCATION SECTION ─────────────────────────────────────── */
+.section-location {
+  margin-top: calc(-1 * var(--space-4));
+}
+
+.location-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-slow);
+}
+
+.location-icon {
+  font-size: var(--font-size-xl);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.location-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.location-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.location-detail {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── 9. NEXT PRAYER SECTION ─────────────────────────────────── */
+.section-next-prayer {
+  /* spacing already handled by main gap */
+}
+
+.next-prayer-card {
+  background: var(--color-bg-next);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.next-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-on-dark-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.next-name {
+  font-size: var(--font-size-next-name);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-on-dark);
+  line-height: 1;
+}
+
+.next-time {
+  font-size: var(--font-size-next-time);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-on-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.next-countdown {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-on-dark-muted);
+  margin-top: var(--space-2);
+}
+
+/* ── 10. PRAYER TIMES SECTION ───────────────────────────────── */
+.section-prayer-times {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Loading skeleton */
+.loading-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.skeleton-card {
+  height: 5rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-skeleton);
+  background-image: linear-gradient(
+    90deg,
+    var(--color-bg-skeleton) 0%,
+    color-mix(in srgb, var(--color-bg-skeleton) 60%, white 40%) 50%,
+    var(--color-bg-skeleton) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Error message */
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  background: var(--color-error-bg);
+  border: 2px solid var(--color-error-border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  color: var(--color-error-text);
+  font-weight: var(--font-weight-medium);
+}
+.error-message span { font-size: var(--font-size-2xl); }
+
+/* Prayer list container */
+.prayer-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Individual prayer item */
+.prayer-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  min-height: 5rem;
+  transition:
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover effect */
+.prayer-item:hover {
+  transform: translateX(3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ACTIVE (next prayer) state */
+.prayer-item.prayer-active {
+  background: var(--color-active-prayer);
+  border-color: var(--color-active-border);
+  box-shadow: 0 4px 20px rgba(244, 166, 42, 0.3);
+}
+.prayer-item.prayer-active .prayer-name {
+  color: var(--color-active-text);
+  font-weight: var(--font-weight-black);
+}
+.prayer-item.prayer-active .prayer-time {
+  color: var(--color-active-text);
+}
+
+/* CURRENT (prayer happening now, 10min window) state */
+.prayer-item.prayer-current {
+  background: var(--color-active-prayer);
+  border-color: var(--color-active-border);
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: var(--color-active-border); }
+  50%       { border-color: color-mix(in srgb, var(--color-active-border) 50%, transparent); }
+}
+
+/* PASSED state */
+.prayer-item.prayer-passed {
+  opacity: 0.6;
+}
+.prayer-item.prayer-passed .prayer-time {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-text-muted);
+}
+
+/* Active indicator bar on left edge */
+.prayer-item.prayer-active::before,
+.prayer-item.prayer-current::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--color-active-border);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+/* Prayer icon */
+.prayer-icon {
+  font-size: var(--font-size-2xl);
+  flex-shrink: 0;
+  width: 3rem;
+  text-align: center;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+}
+
+/* Prayer text info */
+.prayer-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.prayer-name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.prayer-status {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.prayer-item.prayer-active  .prayer-status { color: var(--color-active-text); opacity: 0.75; }
+.prayer-item.prayer-current .prayer-status { color: var(--color-active-text); }
+
+/* Prayer time display */
+.prayer-time {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .prayer-time {
+  color: var(--color-accent);
+}
+
+/* ── 11. NOTIFICATION SECTION ───────────────────────────────── */
+.section-notifications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.notification-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.notification-desc {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-base);
+  max-width: 48ch;
+}
+
+.notification-status {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ── 12. INFO SECTION ───────────────────────────────────────── */
+.section-info {
+  /* spacing from parent gap */
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.info-icon {
+  font-size: var(--font-size-2xl);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.info-card strong {
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.info-card p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-base);
+}
+
+.info-card small {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ── 13. FOOTER ─────────────────────────────────────────────── */
+.app-footer {
+  background: var(--color-bg-footer);
+  border-top: 1.5px solid var(--color-border);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: background-color var(--transition-slow);
+}
+
+.app-footer p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.app-footer a {
+  color: var(--color-accent-light);
+}
+
+.footer-coords {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.footer-version {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+/* ── 14. INSTALL BANNER ─────────────────────────────────────── */
+.install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-bg-card);
+  border-top: 2px solid var(--color-accent);
+  padding: var(--space-4) var(--space-5);
+  box-shadow: 0 -4px 24px var(--color-shadow-strong);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  /* Safe area for notched phones */
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  animation: slide-up 0.3s ease;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.install-banner-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.install-banner-content span {
+  font-size: var(--font-size-2xl);
+  flex-shrink: 0;
+}
+
+.install-banner-content strong {
+  display: block;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+}
+
+.install-banner-content p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.install-banner-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* ── 15. RESPONSIVE BREAKPOINTS ─────────────────────────────── */
+
+/* Tablet and above */
+@media (min-width: 600px) {
+  main {
+    padding-inline: var(--space-8);
+    gap: var(--space-8);
+  }
+
+  .header-inner {
+    padding-inline: var(--space-8);
+  }
+
+  .section-clock {
+    margin-inline: calc(-1 * var(--space-8));
+    padding: var(--space-12) var(--space-10) var(--space-12);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  }
+
+  .clock-time {
+    font-size: 5rem;
+  }
+
+  .prayer-item {
+    padding: var(--space-5) var(--space-6);
+  }
+
+  .prayer-name {
+    font-size: var(--font-size-2xl);
+  }
+
+  .prayer-time {
+    font-size: var(--font-size-3xl);
+  }
+
+  .prayer-icon {
+    font-size: var(--font-size-3xl);
+    width: 3.5rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 900px) {
+  main {
+    padding-inline: var(--space-4);
+    padding-top: var(--space-6);
+  }
+
+  .section-clock {
+    margin-inline: 0;
+    border-radius: var(--radius-xl);
+    margin-top: 0;
+  }
+
+  .clock-time {
+    font-size: 5.5rem;
+  }
+
+  .next-prayer-card {
+    padding: var(--space-10) var(--space-10);
+  }
+
+  .next-name { font-size: 2.75rem; }
+  .next-time { font-size: 3.5rem;  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  html { font-size: 15px; }
+
+  .clock-time {
+    font-size: 3rem;
+  }
+
+  .brand-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .next-name { font-size: 1.75rem; }
+  .next-time { font-size: 2.25rem; }
+
+  .prayer-time {
+    font-size: var(--font-size-xl);
+  }
+
+  .prayer-name {
+    font-size: var(--font-size-lg);
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Print styles */
+@media print {
+  .app-header,
+  .section-notifications,
+  .install-banner,
+  .btn-refresh,
+  #btn-theme {
+    display: none !important;
+  }
+
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  .prayer-item {
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+}

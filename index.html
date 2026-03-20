@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a6b3c" />
+  <meta name="description" content="Jadwal Sholat berdasarkan lokasi Anda secara akurat menggunakan metode Kemenag RI." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Jadwal Sholat" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Apple Touch Icons (fallback for iOS PWA) -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <title>Jadwal Sholat — Waktu Sholat Akurat</title>
+</head>
+<body>
+
+  <!-- ============================================================
+       SKIP LINK — Accessibility: allows keyboard users to jump 
+       directly to main content, bypassing repeated navigation.
+  ============================================================ -->
+  <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
+
+  <!-- ============================================================
+       APP HEADER
+  ============================================================ -->
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+
+      <!-- App branding -->
+      <div class="brand" aria-label="Nama Aplikasi">
+        <span class="brand-icon" aria-hidden="true">🕌</span>
+        <h1 class="brand-title">Jadwal Sholat</h1>
+      </div>
+
+      <!-- Theme toggle (dark / light mode) -->
+      <button
+        id="btn-theme"
+        class="btn-icon"
+        aria-label="Ganti tema terang atau gelap"
+        title="Ganti Tema"
+      >
+        <span class="icon-theme" aria-hidden="true">🌙</span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main id="main-content" role="main">
+
+    <!-- ── CLOCK & DATE SECTION ───────────────────────────── -->
+    <section class="section-clock" aria-label="Jam dan tanggal sekarang">
+      <div class="clock-wrapper">
+
+        <!-- Live clock display -->
+        <time id="clock-time" class="clock-time" aria-live="polite" aria-atomic="true">
+          --:--:--
+        </time>
+
+        <!-- Gregorian date -->
+        <p id="clock-date" class="clock-date" aria-live="polite">
+          Memuat tanggal...
+        </p>
+
+        <!-- Hijri date -->
+        <p id="clock-hijri" class="clock-hijri" aria-live="polite">
+          &nbsp;
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ── LOCATION SECTION ───────────────────────────────── -->
+    <section class="section-location" aria-label="Informasi lokasi Anda">
+
+      <!-- Location status card -->
+      <div id="location-card" class="location-card" role="status" aria-live="polite">
+        <span class="location-icon" aria-hidden="true">📍</span>
+        <div class="location-text">
+          <span id="location-label" class="location-label">Lokasi Anda</span>
+          <span id="location-detail" class="location-detail">Mendeteksi lokasi...</span>
+        </div>
+
+        <!-- Refresh / retry location button -->
+        <button
+          id="btn-refresh-location"
+          class="btn-refresh"
+          aria-label="Perbarui lokasi saya"
+          title="Perbarui Lokasi"
+        >
+          <span aria-hidden="true">🔄</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ── NEXT PRAYER BANNER ─────────────────────────────── -->
+    <section class="section-next-prayer" aria-label="Waktu sholat berikutnya">
+
+      <div id="next-prayer-card" class="next-prayer-card" aria-live="assertive" aria-atomic="true">
+        <p class="next-label">Sholat Berikutnya</p>
+        <p id="next-prayer-name" class="next-name">—</p>
+        <p id="next-prayer-time" class="next-time">--:--</p>
+        <p id="next-prayer-countdown" class="next-countdown" aria-label="Waktu tersisa">
+          Menghitung...
+        </p>
+      </div>
+
+    </section>
+
+    <!-- ── PRAYER TIMES GRID ──────────────────────────────── -->
+    <section class="section-prayer-times" aria-label="Jadwal waktu sholat hari ini">
+
+      <h2 class="section-title">
+        <span aria-hidden="true">🕐</span> Jadwal Sholat Hari Ini
+      </h2>
+
+      <!-- Loading skeleton shown while data is fetching -->
+      <div id="loading-skeleton" class="loading-skeleton" role="status" aria-label="Memuat jadwal sholat...">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+
+      <!-- Error message (hidden by default) -->
+      <div
+        id="error-message"
+        class="error-message hidden"
+        role="alert"
+        aria-live="assertive"
+      >
+        <span aria-hidden="true">⚠️</span>
+        <p id="error-text">Gagal memuat jadwal sholat.</p>
+        <button id="btn-retry" class="btn-primary">Coba Lagi</button>
+      </div>
+
+      <!-- Prayer times list — populated dynamically by JavaScript -->
+      <ul
+        id="prayer-list"
+        class="prayer-list hidden"
+        role="list"
+        aria-label="Daftar waktu sholat"
+      >
+        <!--
+          Each item is dynamically injected in this format:
+          <li class="prayer-item [active]" role="listitem">
+            <div class="prayer-icon" aria-hidden="true">...</div>
+            <div class="prayer-info">
+              <span class="prayer-name">Shubuh</span>
+              <span class="prayer-status">Sudah lewat / Berikutnya</span>
+            </div>
+            <time class="prayer-time" datetime="HH:MM">HH:MM</time>
+          </li>
+        -->
+      </ul>
+
+    </section>
+
+    <!-- ── NOTIFICATION SECTION ───────────────────────────── -->
+    <section class="section-notifications" aria-label="Pengaturan notifikasi sholat">
+
+      <h2 class="section-title">
+        <span aria-hidden="true">🔔</span> Notifikasi Adzan
+      </h2>
+
+      <div class="notification-card">
+        <p class="notification-desc">
+          Aktifkan notifikasi agar Anda mendapatkan pengingat tepat saat waktu sholat tiba,
+          bahkan saat aplikasi berjalan di latar belakang.
+        </p>
+
+        <!-- Notification toggle button -->
+        <button
+          id="btn-notification"
+          class="btn-primary btn-notification"
+          aria-pressed="false"
+          aria-describedby="notification-status"
+        >
+          <span id="notif-btn-icon" aria-hidden="true">🔔</span>
+          <span id="notif-btn-text">Aktifkan Notifikasi</span>
+        </button>
+
+        <!-- Notification permission status -->
+        <p
+          id="notification-status"
+          class="notification-status"
+          aria-live="polite"
+          role="status"
+        >
+          Status: Belum diaktifkan
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- ── ADDITIONAL INFO ────────────────────────────────── -->
+    <section class="section-info" aria-label="Informasi tambahan">
+
+      <div class="info-grid">
+
+        <!-- Calculation method info -->
+        <div class="info-card">
+          <span class="info-icon" aria-hidden="true">📐</span>
+          <div>
+            <strong>Metode Perhitungan</strong>
+            <p>Kemenag RI<br /><small>(Sudut Subuh: 20°, Isya: 18°)</small></p>
+          </div>
+        </div>
+
+        <!-- Madhab info -->
+        <div class="info-card">
+          <span class="info-icon" aria-hidden="true">📚</span>
+          <div>
+            <strong>Mazhab Ashar</strong>
+            <p>Syafi'i<br /><small>(Standar Bayangan 1×)</small></p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       APP FOOTER
+  ============================================================ -->
+  <footer class="app-footer" role="contentinfo">
+    <p>
+      Data disediakan oleh
+      <a href="https://aladhan.com" target="_blank" rel="noopener noreferrer">
+        AlAdhan API
+      </a>
+    </p>
+    <p id="footer-coords" class="footer-coords" aria-live="polite"></p>
+    <p class="footer-version">Jadwal Sholat PWA v1.0</p>
+  </footer>
+
+  <!-- ============================================================
+       INSTALL PWA BANNER (hidden by default, shown by JS)
+  ============================================================ -->
+  <div
+    id="install-banner"
+    class="install-banner hidden"
+    role="complementary"
+    aria-label="Pasang aplikasi"
+  >
+    <div class="install-banner-content">
+      <span aria-hidden="true">📲</span>
+      <div>
+        <strong>Pasang Aplikasi Ini</strong>
+        <p>Tambahkan ke layar utama untuk akses mudah!</p>
+      </div>
+    </div>
+    <div class="install-banner-actions">
+      <button id="btn-install" class="btn-primary btn-small">Pasang</button>
+      <button id="btn-install-dismiss" class="btn-ghost btn-small" aria-label="Tutup banner pemasangan">
+        Nanti
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT — Loaded at end of body for performance
+  ============================================================ -->
+  <script src="script.js" defer></script>
+
+</body>
+</html>
